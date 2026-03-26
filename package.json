@@ -1,0 +1,40 @@
+{
+  "name": "pacman-lwc",
+  "version": "1.0.0",
+  "description": "PacMan LWC Jest Tests",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:unit": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
+    "@lwc/babel-plugin-component": "^9.1.1",
+    "@lwc/engine-dom": "^9.1.1",
+    "@lwc/jest-preset": "^5.0.0",
+    "@lwc/jest-transformer": "^5.0.0",
+    "@salesforce/sfdx-lwc-jest": "^3.1.2",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-environment-jsdom-fifteen": "^1.0.2"
+  },
+  "jest": {
+    "preset": "@lwc/jest-preset",
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ],
+    "testEnvironment": "jsdom",
+    "collectCoverageFrom": [
+      "force-app/main/default/lwc/**/*.js",
+      "!force-app/main/default/lwc/**/*.js-meta.xml"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ],
+    "moduleNameMapper": {
+      "^@salesforce/apex/PacmanScoreController\\.saveScore$": "<rootDir>/__mocks__/apex/saveScore.js",
+      "^@salesforce/apex/PacmanScoreController\\.getHighScores$": "<rootDir>/__mocks__/apex/getHighScores.js"
+    }
+  }
+}
