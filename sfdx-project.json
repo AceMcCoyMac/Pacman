@@ -5,11 +5,15 @@
       "default": true,
       "package": "Pacman",
       "versionName": "ver 1.0",
-      "versionNumber": "1.0.0.NEXT"
+      "versionNumber": "1.0.0.NEXT",
+      "versionDescription": "Initial release of the Pacman game for Salesforce"
     }
   ],
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "62.0",
-  "packageAliases": {}
+  "packageAliases": {
+    "Pacman": "0HogK0000001A5NSAU",
+    "Pacman@1.0.0-1": "04tgK000000Avg9QAC"
+  }
 }
