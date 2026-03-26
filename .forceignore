@@ -1,0 +1,16 @@
+# Salesforce DX .forceignore
+# Ignore local scratch org files
+.sf/
+.sfdx/
+
+# Ignore local only
+*.local.*
+
+# Ignore scratch org config
+config/
+
+# LWC Jest test files
+**/__tests__/**
+
+# Node modules
+node_modules/

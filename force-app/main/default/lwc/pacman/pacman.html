@@ -1,0 +1,74 @@
+<template>
+    <div class="pacman-container">
+        <!-- Start Screen -->
+        <template if:true={showStartScreen}>
+            <div class="screen start-screen">
+                <h1 class="title">PAC-MAN</h1>
+                <p class="subtitle">Use Arrow Keys to move</p>
+                <p class="subtitle">Press P to Pause</p>
+                <div class="input-group">
+                    <label for="playerName">Enter Your Name:</label>
+                    <input
+                        type="text"
+                        id="playerName"
+                        class="name-input"
+                        value={playerName}
+                        onchange={handleNameChange}
+                        placeholder="Your name..."
+                        maxlength="50"
+                    />
+                </div>
+                <button class="btn btn-start" onclick={startGame} disabled={isNameEmpty}>
+                    Start Game
+                </button>
+                <template if:true={isNameEmpty}>
+                    <p class="error-msg">Please enter your name to play!</p>
+                </template>
+            </div>
+        </template>
+
+        <!-- Game Screen -->
+        <template if:true={showGameScreen}>
+            <div class="game-area">
+                <div class="hud">
+                    <span class="hud-item">Player: {playerName}</span>
+                    <span class="hud-item">Score: {score}</span>
+                    <span class="hud-item">Lives: {lives}</span>
+                    <button class="btn btn-pause" onclick={togglePause}>{pauseButtonLabel}</button>
+                </div>
+                <canvas
+                    lwc:ref="gameCanvas"
+                    class="game-canvas"
+                    width="560"
+                    height="620"
+                ></canvas>
+                <template if:true={isPaused}>
+                    <div class="pause-overlay">
+                        <h2>PAUSED</h2>
+                        <p>Press P or click Resume to continue</p>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Game Over Screen -->
+        <template if:true={showGameOverScreen}>
+            <div class="screen gameover-screen">
+                <h1 class="title gameover-title">GAME OVER</h1>
+                <p class="player-name-display">{playerName}</p>
+                <p class="final-score-label">Final Score</p>
+                <p class="final-score">{score}</p>
+                <template if:true={isSavingScore}>
+                    <p class="saving-msg">Saving score...</p>
+                </template>
+                <template if:true={scoreSaved}>
+                    <p class="saved-msg">Score saved! ✓</p>
+                </template>
+                <template if:true={saveError}>
+                    <p class="error-msg">Could not save score.</p>
+                </template>
+                <button class="btn btn-start" onclick={resetGame}>Play Again</button>
+            </div>
+        </template>
+    </div>
+</template>
