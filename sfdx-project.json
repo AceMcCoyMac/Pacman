@@ -14,6 +14,7 @@
   "sourceApiVersion": "62.0",
   "packageAliases": {
     "Pacman": "0HogK0000001A5NSAU",
-    "Pacman@1.0.0-1": "04tgK000000Avg9QAC"
+    "Pacman@1.0.0-1": "04tgK000000Avg9QAC",
+    "Pacman@1.0.0-2": "04tgK000000AvhlQAC"
   }
 }
