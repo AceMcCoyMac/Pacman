@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <applicationVisibilities>
+        <application>Pacman</application>
+        <visible>true</visible>
+    </applicationVisibilities>
+    <classAccesses>
+        <apexClass>PacmanScoreController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PacmanScoreControllerTest</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <description>Grants access to the Pacman application, tabs, Apex classes, LWC, and all Pacman Score fields.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Pacman Player</label>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>true</modifyAllRecords>
+        <object>PacmanScore__c</object>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
+    <tabSettings>
+        <tab>PacmanScore__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>pacman</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+</PermissionSet>

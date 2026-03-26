@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
-    <customObject>PacmanScore__c</customObject>
+    <customObject>true</customObject>
     <description>View Pacman high scores</description>
-    <label>Scores</label>
-    <motif>Custom85: Gamepad</motif>
+    <motif>Custom1: Heart</motif>
 </CustomTab>

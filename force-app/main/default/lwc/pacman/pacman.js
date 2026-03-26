@@ -1,5 +1,6 @@
 import { LightningElement, track } from 'lwc';
 import saveScore from '@salesforce/apex/PacmanScoreController.saveScore';
+import getHighScores from '@salesforce/apex/PacmanScoreController.getHighScores';
 
 // ─── Maze Layout ────────────────────────────────────────────────────────────
 // 0 = empty, 1 = wall, 2 = dot, 3 = power pellet, 4 = ghost house
@@ -62,7 +63,7 @@ const GHOST_START_POSITIONS = [
     { col: 14, row: 14 },
 ];
 
-const PACMAN_START = { col: 13, row: 23 };
+const PACMAN_START = { col: 14, row: 22 };
 const FRIGHTEN_DURATION = 8000; // ms
 
 export default class Pacman extends LightningElement {
@@ -77,6 +78,8 @@ export default class Pacman extends LightningElement {
     @track isSavingScore = false;
     @track scoreSaved = false;
     @track saveError = false;
+    @track highScores = [];
+    @track loadingHighScores = false;
 
     get isNameEmpty() {
         return !this.playerName || this.playerName.trim() === '';
@@ -84,6 +87,10 @@ export default class Pacman extends LightningElement {
 
     get pauseButtonLabel() {
         return this.isPaused ? 'Resume' : 'Pause';
+    }
+
+    get livesDisplay() {
+        return '♥'.repeat(this.lives);
     }
 
     // ── Game internals ──
@@ -131,6 +138,7 @@ export default class Pacman extends LightningElement {
             this._canvas = this.refs.gameCanvas;
             if (this._canvas) {
                 this._ctx = this._canvas.getContext('2d');
+                this._canvas.focus();
                 this._initGame();
                 this._loop(0);
             }
@@ -170,6 +178,8 @@ export default class Pacman extends LightningElement {
         this.isSavingScore = false;
         this.scoreSaved = false;
         this.saveError = false;
+        this.highScores = [];
+        this.loadingHighScores = false;
         this._canvas = null;
     }
 
@@ -180,6 +190,13 @@ export default class Pacman extends LightningElement {
         }
         if (e.code === 'KeyP' && this.showGameScreen) {
             this.togglePause();
+        }
+        // Update nextDir immediately on keypress — don't wait for next move tick
+        if (this.showGameScreen && this._pacman) {
+            if (e.code === 'ArrowUp')    this._pacman.nextDir = DIR.UP;
+            if (e.code === 'ArrowDown')  this._pacman.nextDir = DIR.DOWN;
+            if (e.code === 'ArrowLeft')  this._pacman.nextDir = DIR.LEFT;
+            if (e.code === 'ArrowRight') this._pacman.nextDir = DIR.RIGHT;
         }
     }
 
@@ -333,21 +350,15 @@ export default class Pacman extends LightningElement {
         p.x = p.col * CELL + CELL / 2;
         p.y = p.row * CELL + CELL / 2;
 
-        // Update requested direction from held keys
-        if (this._keysDown['ArrowUp']) p.nextDir = DIR.UP;
-        else if (this._keysDown['ArrowDown']) p.nextDir = DIR.DOWN;
-        else if (this._keysDown['ArrowLeft']) p.nextDir = DIR.LEFT;
-        else if (this._keysDown['ArrowRight']) p.nextDir = DIR.RIGHT;
-
         // Eat dots
         const cell = this._maze[p.row][p.col];
         if (cell === 2) {
             this._maze[p.row][p.col] = 0;
-            this.score += 10;
+            this.score += 1;
             this._dotsEaten++;
         } else if (cell === 3) {
             this._maze[p.row][p.col] = 0;
-            this.score += 50;
+            this.score += 5;
             this._dotsEaten++;
             this._activateFrighten();
         }
@@ -430,13 +441,14 @@ export default class Pacman extends LightningElement {
             if (!g.exited) return;
             if (g.col === p.col && g.row === p.row) {
                 if (g.frightened) {
-                    // Eat ghost
+                    // Eat ghost — send back to house
+                    const idx = this._ghosts.indexOf(g);
                     g.frightened = false;
-                    g.col = GHOST_START_POSITIONS[this._ghosts.indexOf(g)].col;
-                    g.row = GHOST_START_POSITIONS[this._ghosts.indexOf(g)].row;
+                    g.col = GHOST_START_POSITIONS[idx].col;
+                    g.row = GHOST_START_POSITIONS[idx].row;
                     g.x = g.col * CELL + CELL / 2;
                     g.y = g.row * CELL + CELL / 2;
-                    this.score += 200;
+                    this.score += 10;
                 } else {
                     // Lose a life
                     this.lives -= 1;
@@ -476,16 +488,28 @@ export default class Pacman extends LightningElement {
         this._canvas = null;
         this._ctx = null;
 
-        // Save score
+        // Save score then fetch high scores
         this.isSavingScore = true;
+        this.loadingHighScores = true;
+        this.highScores = [];
         saveScore({ playerName: this.playerName.trim(), score: this.score })
             .then(() => {
                 this.isSavingScore = false;
                 this.scoreSaved = true;
+                return getHighScores();
+            })
+            .then((results) => {
+                this.highScores = (results || []).map((r, i) => ({
+                    ...r,
+                    rank: i + 1,
+                    rowClass: r.PlayerName__c === this.playerName.trim() ? 'hs-row hs-highlight' : 'hs-row'
+                }));
+                this.loadingHighScores = false;
             })
             .catch(() => {
                 this.isSavingScore = false;
                 this.saveError = true;
+                this.loadingHighScores = false;
             });
     }
 
@@ -497,7 +521,7 @@ export default class Pacman extends LightningElement {
         if (row < 0 || row >= ROWS) return false;
         if (col < 0 || col >= COLS) return true; // tunnel
         const cell = this._maze[row][col];
-        return cell !== 1;
+        return cell !== 1 && cell !== 4;
     }
 
     _isPassableForGhost(col, row) {

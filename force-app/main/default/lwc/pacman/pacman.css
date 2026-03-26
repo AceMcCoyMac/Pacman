@@ -15,7 +15,7 @@
     padding: 20px;
 }
 
-/* Screens */
+/* ── Screens ── */
 .screen {
     display: flex;
     flex-direction: column;
@@ -25,12 +25,12 @@
     background: #111;
     border: 3px solid #ffff00;
     border-radius: 8px;
-    max-width: 500px;
+    max-width: 560px;
     width: 100%;
 }
 
 .title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: #ffff00;
     text-shadow: 0 0 20px #ffff00, 0 0 40px #ffcc00;
     margin: 0;
@@ -39,12 +39,12 @@
 
 .subtitle {
     color: #fff;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     margin: 4px 0;
     text-align: center;
 }
 
-/* Input */
+/* ── Input ── */
 .input-group {
     display: flex;
     flex-direction: column;
@@ -55,7 +55,7 @@
 
 .input-group label {
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 }
 
 .name-input {
@@ -75,10 +75,10 @@
     box-shadow: 0 0 10px #ffff00;
 }
 
-/* Buttons */
+/* ── Buttons ── */
 .btn {
     padding: 12px 28px;
-    font-size: 1rem;
+    font-size: 0.85rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -86,9 +86,7 @@
     transition: transform 0.1s, box-shadow 0.1s;
 }
 
-.btn:active {
-    transform: scale(0.97);
-}
+.btn:active { transform: scale(0.97); }
 
 .btn-start {
     background: #ffff00;
@@ -111,8 +109,10 @@
 .btn-pause {
     background: #0000cc;
     color: #fff;
-    padding: 8px 16px;
-    font-size: 0.75rem;
+    padding: 10px 16px;
+    font-size: 0.7rem;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .btn-pause:hover {
@@ -120,67 +120,97 @@
     box-shadow: 0 0 10px #0088ff;
 }
 
-/* Error / Save messages */
-.error-msg {
-    color: #ff4444;
-    font-size: 0.7rem;
-    margin: 0;
+/* ── Messages ── */
+.error-msg  { color: #ff4444; font-size: 0.65rem; margin: 0; }
+.saving-msg { color: #aaa;    font-size: 0.65rem; margin: 0; }
+.saved-msg  { color: #44ff44; font-size: 0.65rem; margin: 0; }
+
+/* ── Game layout: canvas + side panel ── */
+.game-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
 }
 
-.saving-msg {
-    color: #aaa;
-    font-size: 0.7rem;
-    margin: 0;
-}
-
-.saved-msg {
-    color: #44ff44;
-    font-size: 0.7rem;
-    margin: 0;
-}
-
-/* HUD */
-.game-area {
+.canvas-wrapper {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
 }
 
-.hud {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    background: #111;
-    padding: 8px 20px;
-    border: 2px solid #333;
-    border-radius: 4px;
-    width: 560px;
-    box-sizing: border-box;
-}
-
-.hud-item {
-    color: #ffff00;
-    font-size: 0.75rem;
-    flex: 1;
-}
-
-/* Canvas */
 .game-canvas {
     display: block;
     border: 3px solid #1a1aff;
     background: #000;
 }
 
-/* Pause overlay */
+/* ── Side Panel ── */
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 160px;
+    padding-top: 4px;
+}
+
+.side-card {
+    background: #111;
+    border: 2px solid #333;
+    border-radius: 6px;
+    padding: 10px 12px;
+}
+
+.side-label {
+    color: #888;
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+}
+
+.side-value {
+    font-size: 0.9rem;
+}
+
+.player-name {
+    color: #ffff00;
+    word-break: break-all;
+    font-size: 0.75rem;
+}
+
+.score-card {
+    border-color: #ffff00;
+}
+
+.score-value {
+    color: #ffff00;
+    font-size: 1.4rem;
+    text-shadow: 0 0 10px #ffff00;
+}
+
+.lives-value {
+    color: #ff4444;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+}
+
+.legend-card {
+    border-color: #444;
+}
+
+.legend-item {
+    color: #ccc;
+    font-size: 0.55rem;
+    margin-bottom: 5px;
+    line-height: 1.6;
+}
+
+/* ── Pause overlay ── */
 .pause-overlay {
     position: absolute;
-    top: 50px;
+    top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 50px);
-    background: rgba(0, 0, 0, 0.75);
+    height: 100%;
+    background: rgba(0,0,0,0.78);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -197,11 +227,15 @@
 
 .pause-overlay p {
     color: #fff;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     margin: 0;
 }
 
-/* Game over specific */
+/* ── Game Over ── */
+.gameover-screen {
+    max-width: 520px;
+}
+
 .gameover-title {
     color: #ff4444;
     text-shadow: 0 0 20px #ff0000;
@@ -209,13 +243,13 @@
 
 .player-name-display {
     color: #ffff00;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin: 0;
 }
 
 .final-score-label {
     color: #aaa;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     margin: 0;
 }
 
@@ -224,4 +258,43 @@
     font-size: 2.5rem;
     margin: 0;
     text-shadow: 0 0 10px #fff;
+}
+
+/* ── High Scores Table ── */
+.high-scores {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.hs-title {
+    color: #ffff00;
+    font-size: 0.85rem;
+    margin: 0 0 12px 0;
+    text-align: center;
+}
+
+.hs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.65rem;
+}
+
+.hs-table th {
+    color: #888;
+    padding: 4px 8px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+    letter-spacing: 1px;
+}
+
+.hs-table td {
+    color: #ccc;
+    padding: 5px 8px;
+    border-bottom: 1px solid #222;
+}
+
+.hs-highlight td {
+    color: #ffff00;
+    text-shadow: 0 0 6px #ffff00;
+    background: #1a1a00;
 }

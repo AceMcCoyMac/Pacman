@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
-    <defaultLandingTab>pacman</defaultLandingTab>
     <description>Pacman game application</description>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
-    <isServiceCloudConsole>false</isServiceCloudConsole>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
     <label>Pacman</label>
     <navType>Standard</navType>
     <tabs>pacman</tabs>
     <tabs>PacmanScore__c</tabs>
     <uiType>Lightning</uiType>
-    <utilityBar/>
 </CustomApplication>

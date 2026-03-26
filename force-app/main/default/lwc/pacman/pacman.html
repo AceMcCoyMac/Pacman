@@ -1,11 +1,12 @@
 <template>
     <div class="pacman-container">
+
         <!-- Start Screen -->
         <template if:true={showStartScreen}>
             <div class="screen start-screen">
                 <h1 class="title">PAC-MAN</h1>
                 <p class="subtitle">Use Arrow Keys to move</p>
-                <p class="subtitle">Press P to Pause</p>
+                <p class="subtitle">Press <strong>P</strong> to Pause</p>
                 <div class="input-group">
                     <label for="playerName">Enter Your Name:</label>
                     <input
@@ -29,25 +30,46 @@
 
         <!-- Game Screen -->
         <template if:true={showGameScreen}>
-            <div class="game-area">
-                <div class="hud">
-                    <span class="hud-item">Player: {playerName}</span>
-                    <span class="hud-item">Score: {score}</span>
-                    <span class="hud-item">Lives: {lives}</span>
+            <div class="game-layout">
+                <!-- Canvas -->
+                <div class="canvas-wrapper">
+                    <canvas
+                        lwc:ref="gameCanvas"
+                        class="game-canvas"
+                        width="560"
+                        height="620"
+                        tabindex="0"
+                    ></canvas>
+                    <template if:true={isPaused}>
+                        <div class="pause-overlay">
+                            <h2>PAUSED</h2>
+                            <p>Press P or click Resume to continue</p>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Side Panel -->
+                <div class="side-panel">
+                    <div class="side-card">
+                        <div class="side-label">PLAYER</div>
+                        <div class="side-value player-name">{playerName}</div>
+                    </div>
+                    <div class="side-card score-card">
+                        <div class="side-label">SCORE</div>
+                        <div class="side-value score-value">{score}</div>
+                    </div>
+                    <div class="side-card">
+                        <div class="side-label">LIVES</div>
+                        <div class="side-value lives-value">{livesDisplay}</div>
+                    </div>
+                    <div class="side-card legend-card">
+                        <div class="side-label">LEGEND</div>
+                        <div class="legend-item">● Dot = 1 pt</div>
+                        <div class="legend-item">◉ Pellet = 5 pts</div>
+                        <div class="legend-item">👻 Ghost = 10 pts</div>
+                    </div>
                     <button class="btn btn-pause" onclick={togglePause}>{pauseButtonLabel}</button>
                 </div>
-                <canvas
-                    lwc:ref="gameCanvas"
-                    class="game-canvas"
-                    width="560"
-                    height="620"
-                ></canvas>
-                <template if:true={isPaused}>
-                    <div class="pause-overlay">
-                        <h2>PAUSED</h2>
-                        <p>Press P or click Resume to continue</p>
-                    </div>
-                </template>
             </div>
         </template>
 
@@ -56,19 +78,50 @@
             <div class="screen gameover-screen">
                 <h1 class="title gameover-title">GAME OVER</h1>
                 <p class="player-name-display">{playerName}</p>
-                <p class="final-score-label">Final Score</p>
+                <p class="final-score-label">Your Score</p>
                 <p class="final-score">{score}</p>
+
                 <template if:true={isSavingScore}>
                     <p class="saving-msg">Saving score...</p>
                 </template>
                 <template if:true={scoreSaved}>
-                    <p class="saved-msg">Score saved! ✓</p>
+                    <p class="saved-msg">✓ Score saved!</p>
                 </template>
                 <template if:true={saveError}>
                     <p class="error-msg">Could not save score.</p>
                 </template>
+
+                <!-- High Scores -->
+                <div class="high-scores">
+                    <h2 class="hs-title">🏆 High Scores</h2>
+                    <template if:true={loadingHighScores}>
+                        <p class="saving-msg">Loading...</p>
+                    </template>
+                    <template if:false={loadingHighScores}>
+                        <table class="hs-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Player</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={highScores} for:item="entry">
+                                    <tr key={entry.rank} class={entry.rowClass}>
+                                        <td>{entry.rank}</td>
+                                        <td>{entry.PlayerName__c}</td>
+                                        <td>{entry.Score__c}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                </div>
+
                 <button class="btn btn-start" onclick={resetGame}>Play Again</button>
             </div>
         </template>
+
     </div>
 </template>

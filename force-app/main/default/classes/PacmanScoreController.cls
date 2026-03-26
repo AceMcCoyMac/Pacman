@@ -8,4 +8,14 @@ public with sharing class PacmanScoreController {
         );
         insert record;
     }
+
+    @AuraEnabled(cacheable=false)
+    public static List<PacmanScore__c> getHighScores() {
+        return [
+            SELECT PlayerName__c, Score__c, CreatedDate
+            FROM PacmanScore__c
+            ORDER BY Score__c DESC
+            LIMIT 10
+        ];
+    }
 }

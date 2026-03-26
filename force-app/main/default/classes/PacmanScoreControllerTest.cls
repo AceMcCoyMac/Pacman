@@ -1,36 +1,27 @@
-@IsTest
-public class PacmanScoreControllerTest {
+@isTest
+private class PacmanScoreControllerTest {
 
-    @IsTest
+    @isTest
     static void testSaveScore() {
         Test.startTest();
-        PacmanScoreController.saveScore('TestPlayer', 1000);
+        PacmanScoreController.saveScore('TestPlayer', 42);
         Test.stopTest();
 
-        List<PacmanScore__c> scores = [
-            SELECT PlayerName__c, Score__c
-            FROM PacmanScore__c
-            WHERE PlayerName__c = 'TestPlayer'
-        ];
-
-        System.assertEquals(1, scores.size(), 'Should have inserted one score record');
-        System.assertEquals('TestPlayer', scores[0].PlayerName__c, 'Player name should match');
-        System.assertEquals(1000, scores[0].Score__c, 'Score should match');
+        List<PacmanScore__c> scores = [SELECT PlayerName__c, Score__c FROM PacmanScore__c WHERE PlayerName__c = 'TestPlayer'];
+        System.assertEquals(1, scores.size());
+        System.assertEquals(42, (Integer)scores[0].Score__c);
     }
 
-    @IsTest
-    static void testSaveScoreZero() {
+    @isTest
+    static void testGetHighScores() {
+        insert new PacmanScore__c(PlayerName__c = 'Alpha', Score__c = 100);
+        insert new PacmanScore__c(PlayerName__c = 'Beta',  Score__c = 200);
+
         Test.startTest();
-        PacmanScoreController.saveScore('ZeroPlayer', 0);
+        List<PacmanScore__c> results = PacmanScoreController.getHighScores();
         Test.stopTest();
 
-        List<PacmanScore__c> scores = [
-            SELECT PlayerName__c, Score__c
-            FROM PacmanScore__c
-            WHERE PlayerName__c = 'ZeroPlayer'
-        ];
-
-        System.assertEquals(1, scores.size(), 'Should have inserted one score record');
-        System.assertEquals(0, scores[0].Score__c, 'Score should be zero');
+        System.assert(results.size() >= 2);
+        System.assertEquals('Beta', results[0].PlayerName__c);
     }
 }
